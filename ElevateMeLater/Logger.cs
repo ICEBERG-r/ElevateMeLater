@@ -7,25 +7,25 @@ public class Logger
     {
         Log.Logger = new LoggerConfiguration().WriteTo.File("log.txt").CreateLogger();
     }
-    public void LogStoppedAtFloor(Sensor s)
+    public void StoppedAtFloor(Sensor sensor)
     {
-        Log.Information("Elevator has stopped on floor " + s.CurrentFloor + " at " +
+        Log.Information("Elevator has stopped on floor " + sensor.CurrentFloor + " at " +
                         "{now}", DateTime.Now);
     }
 
-    public void LogSkippedFloor(Sensor s)
+    public void SkippedFloor(Sensor sensor)
     {
-        Log.Information("Elevator has skipped floor " + s.CurrentFloor + " at {now}",
+        Log.Information("Elevator has skipped floor " + sensor.CurrentFloor + " at {now}",
             DateTime.Now);
     }
 
-    public void LogBoardingRequest(string sel)
+    public void BoardingRequest(string floorAndDirection)
     {
-        Log.Information("Boarding requested: " + sel + " at {now}", DateTime.Now);
+        Log.Information("Boarding requested: " + floorAndDirection + " at {now}", DateTime.Now);
     }
 
-    public void LogExitRequest(int f)
+    public void ExitRequest(int floor)
     {
-        Log.Information("Elevator exit requested: " + f + " at {now}", DateTime.Now);
+        Log.Information("Elevator exit requested: " + floor + " at {now}", DateTime.Now);
     }
 }

@@ -46,13 +46,13 @@ do
             if (building.Elevator.Sensor.InMotion && floor == building.Elevator.Sensor.NextFloor)
             {
                 await Task.Run(() => building.Floors[floor].AddPotentialRiderAsync(direction).ConfigureAwait(false));
-                log.LogBoardingRequest(floor + direction);
+                log.BoardingRequest(floor + direction);
                 
             }
             else
             {
                 building.Floors[floor].AddPotentialRider(direction);
-                log.LogBoardingRequest(floor + direction);
+                log.BoardingRequest(floor + direction);
             }
             
             if (Elevator.IsFirstValidInput)

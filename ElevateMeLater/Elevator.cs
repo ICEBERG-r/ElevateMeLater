@@ -45,7 +45,7 @@ public class Elevator
                 
                         if (!waitingForRiders)
                         {
-                            _log.LogStoppedAtFloor(Sensor);
+                            _log.StoppedAtFloor(Sensor);
                             await Task.Delay(1000).ConfigureAwait(false);
                             waitingForRiders = true;
                         }
@@ -65,7 +65,7 @@ public class Elevator
                 
                     if (!waitingForRiders)
                     {
-                        _log.LogStoppedAtFloor(Sensor);
+                        _log.StoppedAtFloor(Sensor);
                         await Task.Delay(1000).ConfigureAwait(false);
                         waitingForRiders = true;
                     }
@@ -95,7 +95,7 @@ public class Elevator
 
                 if (!waitingForRiders)
                 {
-                    _log.LogSkippedFloor(Sensor);
+                    _log.SkippedFloor(Sensor);
                 }
             
                 Sensor.InMotion = true;
@@ -121,7 +121,7 @@ public class Elevator
                         }
                         if (!waitingForRiders)
                         {
-                            _log.LogStoppedAtFloor(Sensor);
+                            _log.StoppedAtFloor(Sensor);
                             await Task.Delay(1000).ConfigureAwait(false);
                             waitingForRiders = true;
                         }
@@ -139,7 +139,7 @@ public class Elevator
                     }
                     if (!waitingForRiders)
                     {
-                        _log.LogStoppedAtFloor(Sensor);
+                        _log.StoppedAtFloor(Sensor);
                         await Task.Delay(1000).ConfigureAwait(false);
                         waitingForRiders = true;
                     }
@@ -163,7 +163,7 @@ public class Elevator
 
                 if (!waitingForRiders)
                 {
-                    _log.LogSkippedFloor(Sensor);
+                    _log.SkippedFloor(Sensor);
                 }
                 Sensor.InMotion = true;
                 await Task.Delay(3000).ConfigureAwait(false);
@@ -287,7 +287,7 @@ public class Elevator
     public void AddRiderToExitQueue(int floor)
     {
         if (!IdleRiders.Any()) return;
-        _log.LogExitRequest(floor);
+        _log.ExitRequest(floor);
         var rider = IdleRiders.First();
         ExitingRiders[floor].Add(rider);
         IdleRiders.Remove(rider);
@@ -298,7 +298,7 @@ public class Elevator
         if (IdleRiders.Any())
         {
             await Task.Delay(3001);
-            _log.LogExitRequest(floor);
+            _log.ExitRequest(floor);
             var rider = IdleRiders.First();
             ExitingRiders[floor].Add(rider);
             IdleRiders.Remove(rider);
