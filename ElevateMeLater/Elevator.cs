@@ -10,7 +10,7 @@ public class Elevator
     
     public bool InUse { get; private set; }
     public static bool IsFirstValidInput { get; set; }
-    private readonly Logger _log = new ();
+    private readonly Logger _log = new();
     
 
     public Elevator(int maxWeight)
@@ -86,8 +86,7 @@ public class Elevator
                     }
                 }
 
-                if ((!RequestsAtHigherFloors(b) || Sensor.CurrentFloor == b.MaxFloor) &&
-                Sensor.CurrentFloor != b.MinFloor)
+                if (HasNoMoreHigherRequests(b))
                 {
                     Sensor.GoingUp = false;
                     break;
@@ -145,15 +144,14 @@ public class Elevator
                     }
 
                 }
-                if (!RequestsAtLowerFloors(b) && !RequestsAtHigherFloors(b) && Sensor.CurrentFloor == b.MinFloor)
+                if (HasNoRequestsAndIsAtLowestFloor(b))
                 {
                     InUse = false;
                     IsFirstValidInput = true;
                     break;
                 }
             
-                if (((!RequestsAtLowerFloors(b) && RequestsAtHigherFloors(b)) || Sensor.CurrentFloor == b.MinFloor) &&
-                Sensor.CurrentFloor != b.MaxFloor && !Sensor.GoingUp)
+                if (HasNoMoreLowerRequests(b))
                 {
                     Sensor.GoingUp = true;
                     break;
@@ -321,5 +319,20 @@ public class Elevator
         {
             ExitingRiders.Add(i, new List<Rider>());
         }
+    }
+    
+    private bool HasNoRequestsAndIsAtLowestFloor(Building b)
+    {
+        return (!RequestsAtLowerFloors(b) && !RequestsAtHigherFloors(b) && Sensor.CurrentFloor == b.MinFloor);
+    }
+    private bool HasNoMoreLowerRequests(Building b)
+    {
+        return ((!RequestsAtLowerFloors(b) && RequestsAtHigherFloors(b)) || Sensor.CurrentFloor == b.MinFloor) &&
+               Sensor.CurrentFloor != b.MaxFloor && !Sensor.GoingUp;
+    }
+    private bool HasNoMoreHigherRequests(Building b)
+    {
+        return (!RequestsAtHigherFloors(b) || Sensor.CurrentFloor == b.MaxFloor) &&
+               Sensor.CurrentFloor != b.MinFloor;
     }
 }

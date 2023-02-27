@@ -20,9 +20,24 @@ public class Building
         for (var i = MinFloor; i <= MaxFloor; i++)
         {
             Floors.Add(i, new Floor());
+            InitializeUpRequestLists(i);
+            InitializeDownRequestLists(i);
+        }
+    }
+
+    private void InitializeUpRequestLists(int i)
+    {
+        if (i != MaxFloor)
+        {
             Floors[i].UpRequests = new List<Rider>();
-            
-            Floors[i].DownRequests = new List<Rider>();
+        }
+    }
+
+    private void InitializeDownRequestLists(int i)
+    {
+        if (i != MinFloor)
+        {
+            Floors[i].DownRequests = new List<Rider>(); 
         }
     }
 }

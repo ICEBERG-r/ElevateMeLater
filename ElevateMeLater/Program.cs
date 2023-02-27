@@ -1,10 +1,8 @@
 ﻿
 using ElevateMeLater;
 
-//instantiates a twelve story building
 Building building = new(1,12);
 var log = new Logger();
-//
 Elevator.IsFirstValidInput = true;
 
 string? selection;
@@ -19,31 +17,36 @@ do
     selection = Console.ReadLine()?.ToUpper();
     var direction = "K";
     var floor = 0;
+    
     if (selection!.EndsWith('U') || selection.EndsWith('D'))
     {
-        direction = selection.Last().ToString();
+        direction = selection.Last().ToString(); 
         
-        selection = selection.Remove(selection.Length - 1);
+        selection = selection.Remove(selection.Length - 1); 
     }
 
     if (selection != "Q")
     {
         try
         {
-            floor = int.Parse(selection);
+            floor = int.Parse(selection); 
         }
         catch
         {
-            continue;
+            continue; 
         }
     }
     
 
-    if (building.Floors.ContainsKey(floor))
+    if (building.Floors.ContainsKey(floor)) 
     {
+        if (SelectionIsMinFloorDownOrMaxFloorUp(floor, direction))
+        {
+            continue;
+        }
         if (direction is "U" or "D")
         {
-            if (building.Elevator.Sensor.InMotion && floor == building.Elevator.Sensor.NextFloor)
+            if (ElevatorInMotionAndNextFloorSelected(floor))
             {
                 await Task.Run(() => building.Floors[floor].AddPotentialRiderAsync(direction).ConfigureAwait(false));
                 log.BoardingRequest(floor + direction);
@@ -67,7 +70,7 @@ do
         {
             if (building.Elevator.IdleRiders.Any())
             {
-                if (building.Elevator.Sensor.InMotion && floor == building.Elevator.Sensor.NextFloor)
+                if (ElevatorInMotionAndNextFloorSelected(floor))
                 {
                     await Task.Run(() => building.Elevator.AddRiderToExitQueueAsync(floor));
                 }
@@ -103,3 +106,13 @@ do
     
 
 } while (selection != "Q");
+
+bool SelectionIsMinFloorDownOrMaxFloorUp(int floor, string direction)
+{
+    return floor + direction == building.MinFloor + "D" || floor + direction == building.MaxFloor + "U";
+}
+
+bool ElevatorInMotionAndNextFloorSelected(int floor)
+{
+    return building.Elevator.Sensor.InMotion && floor == building.Elevator.Sensor.NextFloor;
+}
